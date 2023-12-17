@@ -1,0 +1,105 @@
+// User interface
+interface User {
+    String getUsername();
+    String getPassword();
+    boolean login(String username, String password);
+}
+
+// Employee class
+class Employee implements User {
+    private String username;
+    private String password;
+    private int age;
+    private int yearsWorked;
+    private int daysWorked;
+    private int vacationDaysTaken;
+    private double salary;
+
+    public Employee(String username, String password, int age, int yearsWorked, int daysWorked, int vacationDaysTaken, double salary) {
+        this.username = username;
+        this.password = password;
+        this.age = age;
+        this.yearsWorked = yearsWorked;
+        this.daysWorked = daysWorked;
+        this.vacationDaysTaken = vacationDaysTaken;
+        this.salary = salary;
+    }
+
+    public int timeToRetirement() {
+        return Math.min(60 - age, 40 - yearsWorked);
+    }
+
+    public int vacationTimeLeft() {
+        return (int) ((daysWorked / 360.0) * (30 - vacationDaysTaken));
+    }
+
+    public int calculateBonus() {
+        return (int) (2.2 * salary);
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public boolean login(String inputUsername, String inputPassword) {
+        return username.equals(inputUsername) && password.equals(inputPassword);
+    }
+}
+
+// SalesRep class
+class SalesRep extends Employee {
+    private int salesMade;
+
+    public SalesRep(String username, String password, int age, int yearsWorked, int daysWorked, int vacationDaysTaken, double salary, int salesMade) {
+        super(username, password, age, yearsWorked, daysWorked, vacationDaysTaken, salary);
+        this.salesMade = salesMade;
+    }
+
+    public int calculateCommission() {
+        return (int) (0.1 * salesMade);
+    }
+}
+
+// SalesManager class
+class SalesManager extends Employee {
+    private int teamSales;
+
+    public SalesManager(String username, String password, int age, int yearsWorked, int daysWorked, int vacationDaysTaken, double salary, int teamSales) {
+        super(username, password, age, yearsWorked, daysWorked, vacationDaysTaken, salary);
+        this.teamSales = teamSales;
+    }
+
+    public int calculateCommission() {
+        return (int) (0.03 * teamSales);
+    }
+}
+
+// Main class
+public class Main {
+    public static void main(String[] args) {
+        // Test the system
+        Employee employee = new Employee("john_doe", "password123", 35, 10, 180, 10, 50000.0);
+        System.out.println("Time to retirement: " + employee.timeToRetirement() + " years");
+        System.out.println("Vacation time left: " + employee.vacationTimeLeft() + " days");
+        System.out.println("Bonus: $" + employee.calculateBonus());
+
+        SalesRep salesRep = new SalesRep("jane_doe", "salesPass", 28, 5, 150, 5, 60000.0, 50);
+        System.out.println("Commission: $" + salesRep.calculateCommission());
+
+        SalesManager salesManager = new SalesManager("manager", "managerPass", 40, 15, 200, 15, 80000.0, 1000);
+        System.out.println("Commission: $" + salesManager.calculateCommission());
+
+        // Login test
+        String inputUsername = "john_doe";
+        String inputPassword = "password123";
+        if (employee.login(inputUsername, inputPassword)) {
+            System.out.println("Login successful for employee " + inputUsername);
+        } else {
+            System.out.println("Login failed for employee " + inputUsername);
+        }
+    }
+}
